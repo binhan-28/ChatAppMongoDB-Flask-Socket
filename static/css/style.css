@@ -7,7 +7,7 @@ body{
 }
 #container{
   width:750px;
-  height:800px;
+  height:700px;
   background:#eff3f7;
   margin:0 auto;
   font-size:0;
@@ -16,7 +16,7 @@ body{
 }
 aside{
   width:260px;
-  height:800px;
+  height:700px;
   background-color:#3b3e49;
   display:inline-block;
   font-size:15px;
@@ -24,7 +24,7 @@ aside{
 }
 main{
   width:490px;
-  height:800px;
+  height:700px;
   display:inline-block;
   font-size:15px;
   vertical-align:top;
@@ -55,7 +55,7 @@ aside ul{
   margin:0;
   list-style-type:none;
   overflow-y:scroll;
-  height:690px;
+  height:700px;
 }
 aside li{
   padding:10px 0;

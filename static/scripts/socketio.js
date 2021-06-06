@@ -1,51 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Connect to websocket
+    //Kết nối với websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+//      const socket = io.connect("http://127.0.0.1:5000");
 
-    // Retrieve username
+    // truy xuất tên người dùng
     const username = document.querySelector('#get-username').innerHTML;
 
+    //truy xuất phòng chat
+    const room = document.querySelector('#room_name').innerHTML;
     // Set default room
-    let room = "Lounge"
-    joinRoom("Lounge");
+//    let room = "Lounge"
+//    joinRoom("Lounge");
 
-    // Send messages
+
+    //Gửi tin nhắn
+
     document.querySelector('#send_message').onclick = () => {
-        socket.emit('incoming-msg', {'msg': document.querySelector('#user_message').value,
+        socket.emit('incoming-msg', {'message': document.querySelector('#user_message').value,
             'username': username, 'room': room});
 
         document.querySelector('#user_message').value = '';
     };
 
-    // Display all incoming messages
+    // Hiển thị tất cả các tin nhắn đến
     socket.on('message', data => {
 
-        // Display current message
-        if (data.msg) {
+        // Hiển thị tin nhắn hiện tại
+        if (data.message) {
             const p = document.createElement('p');
             const span_username = document.createElement('span');
             const span_timestamp = document.createElement('span');
             const br = document.createElement('br')
-            // Display user's own message
+            // hiển thị thông điệp của chính người dùng
             if (data.username == username) {
                     p.setAttribute("class", "my-msg");
 
-                    // Username
+                    // Tên
                     span_username.setAttribute("class", "my-username");
                     span_username.innerText = data.username;
 
-                    // Timestamp
+                    // thời gian
                     span_timestamp.setAttribute("class", "timestamp");
                     span_timestamp.innerText = data.time_stamp;
 
                     // HTML to append
-                    p.innerHTML += span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_timestamp.outerHTML
+                    p.innerHTML += span_username.outerHTML + br.outerHTML + data.message + br.outerHTML + span_timestamp.outerHTML
 
                     //Append
                     document.querySelector('#display-message-section').append(p);
             }
-            // Display other users' messages
+            // hiển thị tin nhắn của người khác
             else if (typeof data.username !== 'undefined') {
                 p.setAttribute("class", "others-msg");
 
@@ -58,14 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 span_timestamp.innerText = data.time_stamp;
 
                 // HTML to append
-                p.innerHTML += span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_timestamp.outerHTML;
+                p.innerHTML += span_username.outerHTML + br.outerHTML + data.message + br.outerHTML + span_timestamp.outerHTML;
 
                 //Append
                 document.querySelector('#display-message-section').append(p);
             }
-            // Display system message
+            //hiển thị thông báo hệ thống
             else {
-                printSysMsg(data.msg);
+                printSysMsg(data.message);
             }
 
 
@@ -79,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let newRoom = p.innerHTML
             // Check if user already in the room
             if (newRoom === room) {
-                msg = `You are already in ${room} room.`;
+                message = `You are already in ${room} room.`;
                 printSysMsg(msg);
             } else {
                 leaveRoom(room);
@@ -120,17 +125,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector("#user_message").focus();
     }
 
-    // Scroll chat window down
+    // Cuộn cửa sổ
     function scrollDownChatWindow() {
         const chatWindow = document.querySelector("#display-message-section");
         chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
     // Print system messages
-    function printSysMsg(msg) {
+    function printSysMsg(message) {
         const p = document.createElement('p');
         p.setAttribute("class", "system-msg");
-        p.innerHTML = msg;
+        p.innerHTML = messages;
         document.querySelector('#display-message-section').append(p);
         scrollDownChatWindow()
 
